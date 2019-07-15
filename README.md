@@ -8,4 +8,5 @@
 |eda|Exploratory Data Analysis|
 |model|ML models for this competition|
 |munge|Data munging and preprocessing code|
+|tracking|MLFlow model tracking and artifacts|
 
