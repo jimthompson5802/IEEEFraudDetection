@@ -1,0 +1,11 @@
+# Kaggle Competition: [IEEE Fraud Detection](https://www.kaggle.com/c/ieee-fraud-detection)
+
+## Contentents
+|Directory|Description|
+|---------|-----------|
+|containers|Dockerfile for containers used in this work|
+|data|Raw competition data and generated feature sets|
+|eda|Exploratory Data Analysis|
+|model|ML models for this competition|
+|munge|Data munging and preprocessing code|
+
