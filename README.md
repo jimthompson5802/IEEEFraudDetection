@@ -1,6 +1,6 @@
 # Kaggle Competition: [IEEE Fraud Detection](https://www.kaggle.com/c/ieee-fraud-detection)
 
-## Contentents
+## Contents
 |Directory|Description|
 |---------|-----------|
 |bin|Bash scripts|
