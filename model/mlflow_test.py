@@ -13,14 +13,14 @@ if __name__ == "__main__":
 
     print(mlflow.get_tracking_uri())
 
-    experiment_id = mlflow.set_experiment('mlflow_demo2')
+    experiment_id = mlflow.set_experiment('hyperparms')
 
-    with mlflow.start_run(experiment_id=experiment_id) as run:
+    with mlflow.start_run() as run:
         mlflow.log_param("param1", randint(0, 100))
 
         mlflow.log_metric("foo", random())
-        mlflow.log_metric("foo", random() + 1)
-        mlflow.log_metric("foo", random() + 2)
+        mlflow.log_metric("foo2", random() + 1)
+        mlflow.log_metric("foo3", random() + 2)
 
         if not os.path.exists("outputs"):
             os.makedirs("outputs")
