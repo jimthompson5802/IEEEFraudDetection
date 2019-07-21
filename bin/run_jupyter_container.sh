@@ -2,6 +2,7 @@
 
 docker run --detach --rm \
     -e MFLOW_TRACKING_URI=${MLFLOW_TRACKING_URI} \
+    -e INSIDE_DOCKER=true \
     -v ${KAGGLE_PROJECT}:/opt/project \
     -p 8888:8888 \
     --name kag_jupyter \
