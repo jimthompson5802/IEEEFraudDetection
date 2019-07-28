@@ -7,6 +7,22 @@ import mlflow
 import mlflow.tracking
 
 
+
+def retrieve_artifacts(run_id, artifact_location, to_directory):
+    """
+    Retrieve artifact for specified run_id
+
+    :param run_id: mlflow run_id
+    :param artifact_location: artifact location in mlflow
+    :param to_directory: location to save the artifact
+    :return: None
+    """
+    client = mlflow.tracking.MlflowClient()
+
+    client.download_artifacts(run_id, artifact_location, to_directory)
+
+
+
 def extract_run_data_for_experiment(experiment_name):
     """
     Extract run data for specified experiment
