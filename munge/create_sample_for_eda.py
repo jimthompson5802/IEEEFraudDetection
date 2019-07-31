@@ -26,7 +26,7 @@ train_raw= pd.merge(train_data,train_id, how='left', on='TransactionID')
 
 #%%
 # extract sample for analysis
-sample_df = train_raw.sample(frac=0.2, random_state=13)
+sample_df = train_raw.sample(frac=0.5, random_state=13)
 sample_df.to_pickle(os.path.join(tmpdir,'sample.pkl'))
 
 #%%
@@ -34,7 +34,7 @@ sample_df.to_pickle(os.path.join(tmpdir,'sample.pkl'))
 experiment_id = mlflow.set_experiment('feature_set')
 
 #%%
-with mlflow.start_run(experiment_id=experiment_id, run_name='eda_sample'):
+with mlflow.start_run(experiment_id=experiment_id, run_name='eda_sample_50pct'):
     mlflow.log_artifact(os.path.join(tmpdir,'sample.pkl'))
 
 #%%
