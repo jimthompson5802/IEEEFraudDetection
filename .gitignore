@@ -4,3 +4,4 @@ tracking
 .ipynb_checkpoints
 .DS_Store
 sandbox
+dask-worker-space
