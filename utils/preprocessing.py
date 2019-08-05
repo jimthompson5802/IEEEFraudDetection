@@ -2,6 +2,17 @@
 #  feature generation functions
 #
 import pandas as pd
+import numpy as np
+import os
+import os.path
+import tempfile
+
+import shutil
+
+from utils.mlflow_experiments import retrieve_artifacts
+from utils.kaggle import get_global_parameters
+
+import pandas as pd
 from sklearn.model_selection import StratifiedKFold
 
 def encode_mean_level(cat_x, y):
@@ -13,7 +24,7 @@ def encode_mean_level(cat_x, y):
 
     returns:
       mean-level encoded dataframe
-      dictitionary to be used for encoding test predictors
+      dictionary to be used for encoding test predictors
 
     """
 
@@ -47,3 +58,65 @@ def encode_mean_level(cat_x, y):
         test_mean_level_mapping.update({var: ll[var].to_dict()})
 
     return pd.concat(results, axis=0), test_mean_level_mapping
+
+
+def retrieve_predictors(num_run_id, cat_run_id):
+    """
+    Retrieve mlflow artifacts and extract out candidate predictors
+
+    :param num_run_id: mlflow run id where numeric predictors were analyzed
+    :param cat_run_id: mlflow run id where categorical predictors were analyzed
+
+    :return: tuple cat_predictors, num_predictors_skewed, num_predictors_nonskewed
+    """
+
+
+
+    # %%
+    global_parms = get_global_parameters()
+    DATA_DIR = os.path.join(global_parms['PROJ_DIR'], 'data')
+
+    # %%
+    #
+    # Retrieve eda results to get significant categorical and numeric attributes
+    #
+    RUN_ID_NUM = num_run_id  # run id for numeric predictors eda
+    RUN_ID_CAT = cat_run_id  # run id for categorical predictors eda
+
+    in_tmpdir = tempfile.mkdtemp()
+    num_dir = os.path.join(in_tmpdir, 'num')
+    cat_dir = os.path.join(in_tmpdir, 'cat')
+
+    os.mkdir(num_dir)
+    os.mkdir(cat_dir)
+
+    retrieve_artifacts(RUN_ID_NUM, '.', num_dir)
+    retrieve_artifacts(RUN_ID_CAT, '.', cat_dir)
+
+    # %%
+    os.listdir(num_dir)
+    # %%
+    os.listdir(cat_dir)
+
+    # %%
+    # retrieve list of categorical variables
+    cat_df = pd.read_pickle(os.path.join(cat_dir, 'chisq_df.pkl'))
+    cat_df = cat_df.loc[cat_df.p_value < 0.05 / cat_df.shape[0]]
+    cat_predictors = cat_df.index.to_list()
+
+    # retrieve skewed numeric variables
+    skewed_df = pd.read_pickle(os.path.join(num_dir,'chisq_df_skewed.pkl'))
+    skewed_df = skewed_df.loc[skewed_df.p_value < 0.05/skewed_df.shape[0]]
+    num_predictors_skewed = skewed_df['var'].to_list()
+
+    # retrieve nonskewed numeric variables
+    nonskewed_df = pd.read_pickle(os.path.join(num_dir,'chisq_df_nonskewed.pkl'))
+    nonskewed_df = nonskewed_df.loc[nonskewed_df.p_value < 0.05/nonskewed_df.shape[0]]
+    num_predictors_nonskewed = nonskewed_df['var'].to_list()
+
+
+
+    shutil.rmtree(cat_dir)
+    shutil.rmtree(num_dir)
+
+    return cat_predictors, num_predictors_skewed, num_predictors_nonskewed
