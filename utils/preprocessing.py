@@ -12,8 +12,12 @@ import shutil
 from utils.mlflow_experiments import retrieve_artifacts
 from utils.kaggle import get_global_parameters
 
-import pandas as pd
 from sklearn.model_selection import StratifiedKFold
+from sklearn.base import  BaseEstimator, TransformerMixin
+
+from io import StringIO
+
+
 
 def encode_mean_level(cat_x, y):
     """
@@ -70,8 +74,6 @@ def retrieve_predictors(num_run_id, cat_run_id):
     :return: tuple cat_predictors, num_predictors_skewed, num_predictors_nonskewed
     """
 
-
-
     # %%
     global_parms = get_global_parameters()
     DATA_DIR = os.path.join(global_parms['PROJ_DIR'], 'data')
@@ -120,3 +122,71 @@ def retrieve_predictors(num_run_id, cat_run_id):
     shutil.rmtree(num_dir)
 
     return cat_predictors, num_predictors_skewed, num_predictors_nonskewed
+
+
+
+def transform_log(x):
+    return np.log( 1 + x)
+
+class SkewedNumberTransformer(BaseEstimator, TransformerMixin):
+    """
+    Perform log(1 + X) transformation.
+    If any attribute of X contains negative values, that attribute
+    will be translated to be non-negative.
+    """
+    def __init__(self, predictors):
+        """
+
+        :param predictors: list of predictors to transform
+        :return: None
+        """
+        self.predictors = predictors
+
+    def fit(self, x, y=None):
+        """
+        :param x: Pandas dataframe containing selected predictors
+        :param y: Pandas series on response variable
+        :return:
+        """
+        df = x[self.predictors]
+        self.adjustments = np.where(np.min(df) >= 0, 0, -np.min(df))
+
+    def transform(self, X):
+        df = X[self.predictors]
+        df = np.log1p(df + self.adjustments)
+        return df
+
+    def fit_transform(self, X):
+        self.fit(X)
+        return self.transform(X)
+
+    def inverse_transform(self, X):
+        ans = np.exp(X) - 1.0
+        ans = ans - self.adjustments
+        return ans
+
+
+
+
+if __name__ == '__main__':
+    print('Hello')
+    df = pd.read_csv(StringIO("""
+x1,x2,x3,x4,x5
+0,3.,-2,2,5
+1.,4,-5.,,-1
+2,5,-7,4.,1.    
+    """))
+    print(df)
+    print(df.dtypes)
+
+    skewed_transformer = SkewedNumberTransformer(predictors=['x' + str(i+1) for i in range(5)])
+    print(skewed_transformer)
+
+    skewed_transformer.fit(df)
+    print(skewed_transformer.transform(df))
+
+    skewed_transformer2 = SkewedNumberTransformer(predictors=['x' + str(i + 1) for i in range(5)])
+    df2 = skewed_transformer2.fit_transform(df)
+    print(df2)
+
+    print(skewed_transformer2.inverse_transform(df2))
