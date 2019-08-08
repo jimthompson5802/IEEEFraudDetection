@@ -13,7 +13,7 @@ import mlflow
 
 from sklearn.model_selection import train_test_split
 
-from utils.preprocessing import retrieve_predictors
+from utils.preprocessing import retrieve_predictors, SkewedNumberTransformer
 from utils.kaggle import get_global_parameters
 
 #%%
@@ -50,7 +50,10 @@ test_raw_df = pd.concat([test_raw[['TransactionID', 'TransactionDT']],
                    test_raw[num_predictors_skewed],
                    test_raw[num_predictors_nonskewed]
                    ], axis=1).copy()
+#%%
+skewed_transformer = SkewedNumberTransformer(predictors=num_predictors_skewed)
 
+skewed_df = skewed_transformer.fit_transform(train_raw_df)
 #%%
 # split train, valid, test data sets
 fs_train_df, temp_train  = train_test_split(train_raw_df, train_size=0.8, random_state=13, stratify=train_raw_df['isFraud'])

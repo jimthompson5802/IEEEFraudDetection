@@ -124,10 +124,6 @@ def retrieve_predictors(num_run_id, cat_run_id):
     return cat_predictors, num_predictors_skewed, num_predictors_nonskewed
 
 
-
-def transform_log(x):
-    return np.log( 1 + x)
-
 class SkewedNumberTransformer(BaseEstimator, TransformerMixin):
     """
     Perform log(1 + X) transformation.
