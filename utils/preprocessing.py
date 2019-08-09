@@ -14,6 +14,8 @@ from utils.kaggle import get_global_parameters
 
 from sklearn.model_selection import StratifiedKFold
 from sklearn.base import  BaseEstimator, TransformerMixin
+from sklearn.impute import SimpleImputer, MissingIndicator
+from sklearn.pipeline import FeatureUnion, Pipeline
 
 from io import StringIO
 
@@ -124,33 +126,30 @@ def retrieve_predictors(num_run_id, cat_run_id):
     return cat_predictors, num_predictors_skewed, num_predictors_nonskewed
 
 
-class SkewedNumberTransformer(BaseEstimator, TransformerMixin):
+class Log1PTransformer(BaseEstimator, TransformerMixin):
     """
     Perform log(1 + X) transformation.
     If any attribute of X contains negative values, that attribute
     will be translated to be non-negative.
     """
-    def __init__(self, predictors):
+    def __init__(self):
         """
 
         :param predictors: list of predictors to transform
         :return: None
         """
-        self.predictors = predictors
 
-    def fit(self, x, y=None):
+    def fit(self, X):
         """
         :param x: Pandas dataframe containing selected predictors
         :param y: Pandas series on response variable
         :return:
         """
-        df = x[self.predictors]
-        self.adjustments = np.where(np.min(df) >= 0, 0, -np.min(df))
+
+        self.adjustments = np.where(np.min(X) >= 0, 0, -np.min(X))
 
     def transform(self, X):
-        df = X[self.predictors]
-        df = np.log1p(df + self.adjustments)
-        return df
+        return np.log1p(X + self.adjustments)
 
     def fit_transform(self, X):
         self.fit(X)
@@ -162,6 +161,41 @@ class SkewedNumberTransformer(BaseEstimator, TransformerMixin):
         return ans
 
 
+class SkewedNumberTransformer(BaseEstimator, TransformerMixin):
+    """
+    Perform log(1 + X) transformation.
+    Augment with indicator matrix for any missing values.
+    Imput median for any missing values
+    """
+    def __init__(self, imputer_strategy='median'):
+        """
+        :impute_strategy:  strategy to for missing value imputation
+        :return: None
+        """
+        pipe = Pipeline([('log1p', Log1PTransformer()),
+                         ('imp_nan', SimpleImputer(strategy=imputer_strategy))])
+
+        self.union = FeatureUnion([('log1p', pipe),
+                                   ('nan_ind',MissingIndicator())])
+
+    def fit(self, X):
+        """
+        :param x: Pandas dataframe containing selected predictors
+        :param y: Pandas series on response variable
+        :return:
+        """
+        self.union.fit(X)
+
+    def transform(self, X):
+        df = self.union.transform(X)
+        return df
+
+    def fit_transform(self, X):
+        self.union.fit(X)
+        return self.union.transform(X)
+
+    def inverse_transform(self, X):
+        pass
 
 
 if __name__ == '__main__':
@@ -170,19 +204,53 @@ if __name__ == '__main__':
 x1,x2,x3,x4,x5
 0,3.,-2,2,5
 1.,4,-5.,,-1
-2,5,-7,4.,1.    
+2,5,-7,4.,1.
+3,7,,6,3.    
     """))
     print(df)
     print(df.dtypes)
 
-    skewed_transformer = SkewedNumberTransformer(predictors=['x' + str(i+1) for i in range(5)])
+    df0 = pd.read_csv(StringIO("""
+x1,x2,x3,x4,x5
+0,3.,-2,2,5
+1.,,-5.,6,
+2,5,-7,4.,1.
+3,7,3,6,3.    
+        """))
+    print(df0)
+
+
+    log1p_estimator = Log1PTransformer()
+
+    log1p_estimator.fit(df)
+    print('log1p_transform\n', log1p_estimator.transform(df))
+
+    log1p_estimator2 = Log1PTransformer()
+    print('log1p_fit_transform\n', log1p_estimator.fit_transform(df))
+
+
+    skewed_transformer = SkewedNumberTransformer()
     print(skewed_transformer)
 
     skewed_transformer.fit(df)
     print(skewed_transformer.transform(df))
 
-    skewed_transformer2 = SkewedNumberTransformer(predictors=['x' + str(i + 1) for i in range(5)])
+    skewed_transformer2 = SkewedNumberTransformer()
     df2 = skewed_transformer2.fit_transform(df)
     print(df2)
 
     print(skewed_transformer2.inverse_transform(df2))
+
+    missing_ind = MissingIndicator(features='all')
+
+
+    df3 = pd.DataFrame(missing_ind.fit_transform(df).astype('int'))
+    df3.columns = [c+'_nan' for c in df2.columns]
+    df3.set_index(df2.index)
+    print(df3)
+
+    print('nan-transform\n', missing_ind.transform(df).astype('int'))
+    print('nan-transform0\n', missing_ind.transform(df0).astype('int'))
+
+
+    df4 = pd.concat([df2, df3], axis=1)
