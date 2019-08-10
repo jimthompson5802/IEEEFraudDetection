@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e -x
+
+image=${1:-all}
+
+if [[ ${image} == all || ${image} == base ]]
+then
+    echo ">>>> building python image"
+    pushd containers/python_image
+    docker build -t kag_python .
+    popd
+fi
+
+if [[ ${image} == all || ${image} == mlbox ]]
+then
+    echo ">>>> building mlbox imaage"
+    pushd containers/mlbox_image
+    docker build -t kag_mlbox .
+    popd
+fi
