@@ -151,7 +151,7 @@ class Log1PTransformer(BaseEstimator, TransformerMixin):
     def transform(self, X):
         return np.log1p(X + self.adjustments)
 
-    def fit_transform(self, X):
+    def fit_transform(self, X, y=None):
         self.fit(X)
         return self.transform(X)
 
@@ -176,7 +176,7 @@ class SkewedNumberTransformer(BaseEstimator, TransformerMixin):
                          ('imp_nan', SimpleImputer(strategy=imputer_strategy))])
 
         self.union = FeatureUnion([('log1p', pipe),
-                                   ('nan_ind',MissingIndicator())])
+                                   ('nan_ind',MissingIndicator(features='all'))])
 
     def fit(self, X):
         """
@@ -184,7 +184,7 @@ class SkewedNumberTransformer(BaseEstimator, TransformerMixin):
         :param y: Pandas series on response variable
         :return:
         """
-        self.union.fit(X)
+        self.union.fit(X,None)
 
     def transform(self, X):
         df = self.union.transform(X)
@@ -228,29 +228,20 @@ x1,x2,x3,x4,x5
     log1p_estimator2 = Log1PTransformer()
     print('log1p_fit_transform\n', log1p_estimator.fit_transform(df))
 
-
+    print("starting skew test suite")
     skewed_transformer = SkewedNumberTransformer()
-    print(skewed_transformer)
 
     skewed_transformer.fit(df)
-    print(skewed_transformer.transform(df))
+    df2 = pd.DataFrame(skewed_transformer.transform(df))
+    print('df2\n', df2)
 
     skewed_transformer2 = SkewedNumberTransformer()
-    df2 = skewed_transformer2.fit_transform(df)
-    print(df2)
+    df3 = pd.DataFrame(skewed_transformer2.fit_transform(df))
+    df3.index = df.index
+    df3.columns = df.columns.to_list() + [c+"_nan" for c in df.columns]
+    print('df3\n', df3)
 
-    print(skewed_transformer2.inverse_transform(df2))
-
-    missing_ind = MissingIndicator(features='all')
-
-
-    df3 = pd.DataFrame(missing_ind.fit_transform(df).astype('int'))
-    df3.columns = [c+'_nan' for c in df2.columns]
-    df3.set_index(df2.index)
-    print(df3)
-
-    print('nan-transform\n', missing_ind.transform(df).astype('int'))
-    print('nan-transform0\n', missing_ind.transform(df0).astype('int'))
-
-
-    df4 = pd.concat([df2, df3], axis=1)
+    df4 = pd.DataFrame(skewed_transformer2.transform(df0))
+    df4.index = df0.index
+    df4.columns = df0.columns.to_list() + [c+"_nan" for c in df0.columns]
+    print('df4\n', df4)
