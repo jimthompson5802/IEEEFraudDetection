@@ -13,8 +13,13 @@ import mlflow
 
 from sklearn.model_selection import train_test_split
 
-from utils.preprocessing import retrieve_predictors, SkewedNumberTransformer
+from utils.preprocessing import retrieve_predictors
 from utils.kaggle import get_global_parameters
+
+import tempfile
+import pickle
+import shutil
+
 
 #%%
 global_parms = get_global_parameters()
@@ -50,13 +55,26 @@ test_raw_df = pd.concat([test_raw[['TransactionID', 'TransactionDT']],
                    test_raw[num_predictors_skewed],
                    test_raw[num_predictors_nonskewed]
                    ], axis=1).copy()
-#%%
-skewed_transformer = SkewedNumberTransformer(predictors=num_predictors_skewed)
 
-skewed_df = skewed_transformer.fit_transform(train_raw_df)
 #%%
 # split train, valid, test data sets
 fs_train_df, temp_train  = train_test_split(train_raw_df, train_size=0.8, random_state=13, stratify=train_raw_df['isFraud'])
 fs_valid_df, fs_test_df = train_test_split(temp_train, train_size=0.5, random_state=29, stratify=temp_train['isFraud'])
 
 kag_test_df = test_raw_df
+
+#%%
+fs_list = ['fs_train_df', 'fs_valid_df', 'fs_test_df', 'kag_test_df']
+tmpdir = tempfile.mkdtemp()
+for f in fs_list:
+    eval(f).to_pickle(os.path.join(tmpdir, f + '.pkl'))
+
+#%%
+# Save feature set as mlflow artifacts
+experiment_id = mlflow.set_experiment('feature_set')
+with mlflow.start_run(experiment_id=experiment_id, run_name='feature_set_0'):
+        mlflow.log_artifacts(tmpdir)
+
+#%%
+# clean up
+shutil.rmtree(tmpdir)
