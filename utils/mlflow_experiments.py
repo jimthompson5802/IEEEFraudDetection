@@ -61,6 +61,6 @@ def extract_run_data_for_experiment(experiment_name):
     run_info_list = client.list_run_infos(experiment.experiment_id)
 
     experiment_runs = pd.concat([extract_run_data(run_info) for run_info in run_info_list],
-                                axis=0, ignore_index=True)
+                                axis=0, ignore_index=True, sort=False)
 
     return experiment_runs
