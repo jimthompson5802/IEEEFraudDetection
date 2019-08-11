@@ -29,8 +29,8 @@ DATA_DIR = os.path.join(global_parms['PROJ_DIR'],'data')
 #
 # Retrieve eda results to get significant categorical and numeric attributes
 #
-RUN_ID_NUM='9b062ab25fdb46db8f984bf674381432'  # run id for numeric predictors eda
-RUN_ID_CAT='d6a672688da343e089f17714f6ae494b'  # run id for categorical predictors eda
+RUN_ID_NUM='9c45c9fcf2a94e35b0b7523ac367cf9f'  # run id for numeric predictors eda
+RUN_ID_CAT='f51f27e16ff844cd9406af2ff4a11c54'  # run id for categorical predictors eda
 
 cat_predictors, num_predictors_skewed, num_predictors_nonskewed = retrieve_predictors(RUN_ID_NUM, RUN_ID_CAT)
 
