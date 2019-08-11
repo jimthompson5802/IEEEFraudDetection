@@ -2,7 +2,7 @@
 
 set -x -e
 
-container_parm=${1:-pybash}  #pybash | pyjpynb  | h2obash | h2ojpynb | mlflow
+container_parm=${1:-pybash}  #pybash | pyjpynb | mlboxbash | mlboxjpynb | h2obash | h2ojpynb | mlflow
 
 
 case ${container_parm} in
@@ -18,12 +18,26 @@ case ${container_parm} in
                 --allow-root --password='' --NotebookApp.token='' \
                  --notebook-dir=/opt/project";;
 
+    mlboxbash) image=kag_mlbox
+            interactive='-it'
+            ports=""
+            cmd=/bin/bash;;
+
+    mlboxjpynb) image=kag_mlbox
+             interactive='--detach'
+             ports='-p 8888:8888'
+             cmd="jupyter notebook --no-browser --ip 0.0.0.0 \
+                --allow-root --password='' --NotebookApp.token='' \
+                 --notebook-dir=/opt/project";;
+
+
+
     h2obash) image=kag_h2o
             interactive='-it'
             ports=""
             cmd=/bin/bash;;
 
-    h2ojpynb) image=kag_python
+    h2ojpynb) image=kag_h2o
              interactive='--detach'
              ports='-p 8888:8888'
              cmd="jupyter notebook --no-browser --ip 0.0.0.0 \
@@ -43,7 +57,6 @@ docker run ${interactive} --rm \
     -e INSIDE_DOCKER=true \
     -v ${KAGGLE_PROJECT}:/opt/project \
     ${ports} \
-    -p 8787:8787 \
     --name ${container_parm} \
     ${image} \
     ${cmd}
