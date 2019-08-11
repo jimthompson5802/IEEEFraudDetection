@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3:4.3.27
+FROM continuumio/anaconda3:5.2.0
 
 # 
 # install additional packages
