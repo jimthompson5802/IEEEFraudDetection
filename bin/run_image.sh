@@ -25,8 +25,8 @@ case ${container_parm} in
 
     mlboxjpynb) image=kag_mlbox
              interactive='--detach'
-             ports='-p 8888:8888'
-             cmd="jupyter notebook --no-browser --ip 0.0.0.0 \
+             ports='-p 8889:8889'
+             cmd="jupyter notebook --no-browser --ip 0.0.0.0  --port 8889\
                 --allow-root --password='' --NotebookApp.token='' \
                  --notebook-dir=/opt/project";;
 
@@ -39,8 +39,8 @@ case ${container_parm} in
 
     h2ojpynb) image=kag_h2o
              interactive='--detach'
-             ports='-p 8888:8888'
-             cmd="jupyter notebook --no-browser --ip 0.0.0.0 \
+             ports='-p 8890:8890'
+             cmd="jupyter notebook --no-browser --ip 0.0.0.0 --port 8890\
                 --allow-root --password='' --NotebookApp.token='' \
                  --notebook-dir=/opt/project";;
 
