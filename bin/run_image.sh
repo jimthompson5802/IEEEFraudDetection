@@ -44,6 +44,18 @@ case ${container_parm} in
                 --allow-root --password='' --NotebookApp.token='' \
                  --notebook-dir=/opt/project";;
 
+    tpotbash) image=kag_tpot
+            interactive='-it'
+            ports=""
+            cmd=/bin/bash;;
+
+    tpotjpynb) image=kag_tpot
+             interactive='--detach'
+             ports='-p 8891:8891'
+             cmd="jupyter notebook --no-browser --ip 0.0.0.0 --port 8891\
+                --allow-root --password='' --NotebookApp.token='' \
+                 --notebook-dir=/opt/project";;
+
     mlflow) image=kag_python
             interactive='--detach'
             ports="-p 5000:5000"

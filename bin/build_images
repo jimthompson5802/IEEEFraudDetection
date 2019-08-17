@@ -27,3 +27,11 @@ then
     docker build -t kag_h2o .
     popd
 fi
+
+if [[ ${image} == all || ${image} == tpot ]]
+then
+    echo ">>>> building tpot image"
+    pushd containers/tpot_image
+    docker build -t kag_tpot .
+    popd
+fi
