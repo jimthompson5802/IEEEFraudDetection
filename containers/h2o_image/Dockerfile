@@ -30,3 +30,4 @@ RUN groupadd -g 1000 ec2-user && \
 
 WORKDIR /opt/project
 ENV MLFLOW_TRACKING_URI /opt/project/tracking
+ENV KAGGLE_PROJECT /opt/project
