@@ -72,7 +72,6 @@ esac
 
 
 docker run ${interactive} --rm \
-    -e MFLOW_TRACKING_URI=${MLFLOW_TRACKING_URI} \
     -e INSIDE_DOCKER=true \
     -v ${KAGGLE_PROJECT}:/opt/project \
     ${ports} \
