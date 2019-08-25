@@ -17,7 +17,7 @@ pull_image () {
     echo "pulling image: " ${image_to_pull}
 
     # pull from docker hub
-    docker push dsimages/${image_to_pull}
+    docker pull dsimages/${image_to_pull}
 
     # create tag for local use
     docker tag dsimages/${image_to_pull} ${image_to_pull}
