@@ -72,6 +72,7 @@ esac
 
 
 docker run ${interactive} --rm \
+    -e KAGGLE_PROJECT=${KAGGLE_PROJECT} \
     -e INSIDE_DOCKER=true \
     -v ${KAGGLE_PROJECT}:/opt/project \
     ${ports} \
