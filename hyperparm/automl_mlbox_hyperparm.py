@@ -2,6 +2,8 @@
 # coding: utf-8
 
 # # mlbox do some hyper param analysis
+import matplotlib
+matplotlib.use('Agg')
 
 # In[1]:
 
@@ -74,13 +76,13 @@ os.listdir(TMPDIR)
 # In[9]:
 
 
-pd.read_pickle(os.path.join(TMPDIR,'fs_train_df.pkl'))     .sample(10000).drop(['TransactionID', 'TransactionDT', 'addr1'], axis=1)     .to_csv(os.path.join(TMPDIR,'fs_train_df.csv'),index=False)
+pd.read_pickle(os.path.join(TMPDIR,'fs_train_df.pkl'))     .sample(frac=0.5).drop(['TransactionID', 'TransactionDT', 'addr1'], axis=1)     .to_csv(os.path.join(TMPDIR,'fs_train_df.csv'),index=False)
 
 
 # In[10]:
 
 
-pd.read_pickle(os.path.join(TMPDIR,'fs_test_df.pkl'))     .sample(10000).drop(['isFraud', 'TransactionID', 'TransactionDT', 'addr1'], axis=1)     .to_csv(os.path.join(TMPDIR,'fs_test_df.csv'),index=False)
+pd.read_pickle(os.path.join(TMPDIR,'fs_test_df.pkl'))     .sample(frac=0.5).drop(['isFraud', 'TransactionID', 'TransactionDT', 'addr1'], axis=1)     .to_csv(os.path.join(TMPDIR,'fs_test_df.csv'),index=False)
 
 
 # In[11]:
