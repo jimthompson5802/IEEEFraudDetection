@@ -9,13 +9,13 @@ case ${container_parm} in
     pybash) image=kag_python
             interactive='-it'
             ports=""
-            other_run_parms=''
+            other_run_parms='--user ec2-user:ec2-user'
             cmd=/bin/bash;;
 
     pyjpynb) image=kag_python
              interactive='--detach'
              ports='-p 8888:8888'
-             other_run_parms=''
+             other_run_parms='--user ec2-user:ec2-user'
              cmd="jupyter notebook --no-browser --ip 0.0.0.0 \
                 --allow-root --password='' --NotebookApp.token='' \
                  --notebook-dir=/opt/project";;
@@ -23,29 +23,27 @@ case ${container_parm} in
     mlboxbash) image=kag_mlbox
             interactive='-it'
             ports=""
-            other_run_parms=''
+            other_run_parms='--user ec2-user:ec2-user'
             cmd=/bin/bash;;
 
     mlboxjpynb) image=kag_mlbox
              interactive='--detach'
              ports='-p 8889:8889'
-             other_run_parms='--shm-size=1g'
+             other_run_parms='--shm-size=1g --user ec2-user:ec2-user'
              cmd="jupyter notebook --no-browser --ip 0.0.0.0  --port 8889\
                 --allow-root --password='' --NotebookApp.token='' \
                  --notebook-dir=/opt/project";;
 
-
-
     h2obash) image=kag_h2o
             interactive='-it'
             ports=""
-            other_run_parms=''
+            other_run_parms='--user ec2-user:ec2-user'
             cmd=/bin/bash;;
 
     h2ojpynb) image=kag_h2o
              interactive='--detach'
              ports='-p 8890:8890'
-             other_run_parms=''
+             other_run_parms='--user ec2-user:ec2-user'
              cmd="jupyter notebook --no-browser --ip 0.0.0.0 --port 8890\
                 --allow-root --password='' --NotebookApp.token='' \
                  --notebook-dir=/opt/project";;
@@ -59,7 +57,7 @@ case ${container_parm} in
     tpotjpynb) image=kag_tpot
              interactive='--detach'
              ports='-p 8891:8891'
-             other_run_parms=''
+             other_run_parms='--user ec2-user:ec2-user'
              cmd="jupyter notebook --no-browser --ip 0.0.0.0 --port 8891\
                 --allow-root --password='' --NotebookApp.token='' \
                  --notebook-dir=/opt/project";;
@@ -67,6 +65,7 @@ case ${container_parm} in
     mlflow) image=kag_python
             interactive='--detach'
             ports="-p 5000:5000"
+            other_run_parms='--user ec2-user:ec2-user'
             cmd="mlflow server --host 0.0.0.0 --backend-store-uri=file:///opt/project/tracking";;
 
 esac

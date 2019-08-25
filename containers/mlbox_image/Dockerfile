@@ -15,5 +15,10 @@ RUN apt-get update && apt-get install -y build-essential && \
 # upgrade to latest pandas to match rest of environment py3.6
 RUN pip install pandas==0.24.2
 
+RUN groupadd -g 1000 ec2-user && \
+    useradd -u 1000 -g 1000 ec2-user && \
+    mkdir -p /home/ec2-user && \
+    chown ec2-user:ec2-user /home/ec2-user
+
 WORKDIR /opt/project
 ENV MLFLOW_TRACKING_URI /opt/project/tracking
