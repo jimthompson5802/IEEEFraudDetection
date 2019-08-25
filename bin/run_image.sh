@@ -76,6 +76,7 @@ docker run ${interactive} --rm \
     -v ${KAGGLE_PROJECT}:/opt/project \
     ${ports} \
     ${other_run_parms} \
+    --hostname ${container_parm} \
     --name ${container_parm} \
     ${image} \
     ${cmd}
