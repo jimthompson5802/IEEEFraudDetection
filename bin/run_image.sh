@@ -62,6 +62,20 @@ case ${container_parm} in
                 --allow-root --password='' --NotebookApp.token='' \
                  --notebook-dir=/opt/project";;
 
+    tfgpubash) image=kag_tfgpu
+            interactive='-it'
+            ports=""
+            other_run_parms=''
+            cmd=/bin/bash;;
+
+    tfgpujpynb) image=kag_tfgpu
+             interactive='--detach'
+             ports='-p 8891:8891'
+             other_run_parms='--user ec2-user:ec2-user'
+             cmd="jupyter notebook --no-browser --ip 0.0.0.0 --port 8891\
+                --allow-root --password='' --NotebookApp.token='' \
+                 --notebook-dir=/opt/project";;
+
     mlflow) image=kag_python
             interactive='--detach'
             ports="-p 5000:5000"

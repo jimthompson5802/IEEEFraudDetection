@@ -8,6 +8,7 @@ images=(
     kag_mlbox
     kag_h2o
     kag_tpot
+    kag_tfgpu
 )
 
 # function to push an image to docker hub

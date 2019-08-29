@@ -35,3 +35,11 @@ then
     docker build -t kag_tpot .
     popd
 fi
+
+if [[ ${image} == all || ${image} == tfgpu ]]
+then
+    echo ">>>> building tpot image"
+    pushd containers/tfgpu_image
+    docker build -t kag_tfgpu .
+    popd
+fi
