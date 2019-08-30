@@ -51,7 +51,7 @@ case ${container_parm} in
     tpotbash) image=kag_tpot
             interactive='-it'
             ports=""
-            other_run_parms=''
+            other_run_parms='--user ec2-user:ec2-user'
             cmd=/bin/bash;;
 
     tpotjpynb) image=kag_tpot
@@ -65,7 +65,7 @@ case ${container_parm} in
     tfgpubash) image=kag_tfgpu
             interactive='-it'
             ports=""
-            other_run_parms=''
+            other_run_parms='--user ec2-user:ec2-user'
             cmd=/bin/bash;;
 
     tfgpujpynb) image=kag_tfgpu
