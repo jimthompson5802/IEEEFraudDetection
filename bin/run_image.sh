@@ -72,7 +72,7 @@ case ${container_parm} in
              interactive='--detach'
              ports='-p 8891:8891'
              other_run_parms='--user ec2-user:ec2-user'
-             cmd="jupyter notebook --no-browser --ip 0.0.0.0 --port 8891\
+             cmd="jupyter notebook --no-browser --ip 0.0.0.0 --port 8892\
                 --allow-root --password='' --NotebookApp.token='' \
                  --notebook-dir=/opt/project";;
 
