@@ -1,7 +1,7 @@
 # Tensorflow
 FROM tensorflow/tensorflow:latest-gpu-py3
 
-RUN pip install jupyter
+RUN pip install jupyter numpy
 
 RUN groupadd -g 1000 ec2-user && \
     useradd -u 1000 -g 1000 ec2-user && \
