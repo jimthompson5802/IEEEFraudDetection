@@ -4,42 +4,17 @@ set -e -x
 
 image=${1:-all}
 
-if [[ ${image} == all || ${image} == base ]]
-then
-    echo ">>>> building python image"
-    pushd containers/python_image
-    docker build -t kag_python .
-    popd
+if [[ ${image} == "all" ]]; then
+    images=(python mlbox h2o tpot tfgpu)
+else
+    images=(${image})
 fi
 
-if [[ ${image} == all || ${image} == mlbox ]]
-then
-    echo ">>>> building mlbox imaage"
-    pushd containers/mlbox_image
-    docker build -t kag_mlbox .
+for img in "${images[@]}"
+do
+    echo ">>>> building ${img} image"
+    pushd containers/${img}_image
+    docker build -t kag_${img} .
     popd
-fi
+done
 
-if [[ ${image} == all || ${image} == h2o ]]
-then
-    echo ">>>> building h2o image"
-    pushd containers/h2o_image
-    docker build -t kag_h2o .
-    popd
-fi
-
-if [[ ${image} == all || ${image} == tpot ]]
-then
-    echo ">>>> building tpot image"
-    pushd containers/tpot_image
-    docker build -t kag_tpot .
-    popd
-fi
-
-if [[ ${image} == all || ${image} == tfgpu ]]
-then
-    echo ">>>> building tfgpu image"
-    pushd containers/tfgpu_image
-    docker build -t kag_tfgpu .
-    popd
-fi
