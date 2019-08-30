@@ -3,7 +3,7 @@
 set -x -e
 
 container_parm=${1:-pybash}  #pybash | pyjpynb | mlboxbash | mlboxjpynb | h2obash | h2ojpynb | mlflow
-
+project_dir=${KAGGLE_PROJECT:-$PWD}
 
 case ${container_parm} in
     pybash) image=kag_python
@@ -87,7 +87,7 @@ esac
 
 docker run ${interactive} --rm \
     -e INSIDE_DOCKER=true \
-    -v ${KAGGLE_PROJECT}:/opt/project \
+    -v ${project_dir}:/opt/project \
     ${ports} \
     ${other_run_parms} \
     --hostname ${container_parm} \
