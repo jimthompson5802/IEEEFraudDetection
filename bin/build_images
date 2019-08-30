@@ -38,7 +38,7 @@ fi
 
 if [[ ${image} == all || ${image} == tfgpu ]]
 then
-    echo ">>>> building tpot image"
+    echo ">>>> building tfgpu image"
     pushd containers/tfgpu_image
     docker build -t kag_tfgpu .
     popd
