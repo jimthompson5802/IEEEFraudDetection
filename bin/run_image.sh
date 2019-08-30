@@ -70,7 +70,7 @@ case ${container_parm} in
 
     tfgpujpynb) image=kag_tfgpu
              interactive='--detach'
-             ports='-p 8891:8891'
+             ports='-p 8892:8892'
              other_run_parms='--user ec2-user:ec2-user'
              cmd="jupyter notebook --no-browser --ip 0.0.0.0 --port 8892\
                 --allow-root --password='' --NotebookApp.token='' \
