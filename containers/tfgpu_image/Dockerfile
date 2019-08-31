@@ -1,6 +1,8 @@
 # Tensorflow
 FROM tensorflow/tensorflow:latest-gpu-py3
 
+RUN apt-get -y update && apt-get install -y git
+
 RUN pip install jupyter matplotlib
 
 RUN groupadd -g 1000 ec2-user && \
