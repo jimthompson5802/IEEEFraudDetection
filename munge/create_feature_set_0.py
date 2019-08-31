@@ -6,8 +6,6 @@
 #
 
 import pandas as pd
-import numpy as np
-import os
 import os.path
 import mlflow
 
@@ -17,7 +15,6 @@ from utils.preprocessing import retrieve_predictors
 from utils.kaggle import get_global_parameters
 
 import tempfile
-import pickle
 import shutil
 
 
@@ -38,8 +35,8 @@ cat_predictors, num_predictors_skewed, num_predictors_nonskewed = retrieve_predi
 #
 # retrieve Kaggle raw data
 #
-train_raw = pd.read_pickle(os.path.join(DATA_DIR, 'raw', 'train_combined.pkl'))
-test_raw = pd.read_pickle(os.path.join(DATA_DIR,'raw','test_combined.pkl'))
+train_raw = pd.read_pickle(os.path.join(DATA_DIR, 'raw', 'train_combined.pkl.zip'))
+test_raw = pd.read_pickle(os.path.join(DATA_DIR,'raw','test_combined.pkl.zip'))
 
 #%%
 # start building up feature set dataframe
@@ -67,7 +64,7 @@ kag_test_df = test_raw_df
 fs_list = ['fs_train_df', 'fs_valid_df', 'fs_test_df', 'kag_test_df']
 tmpdir = tempfile.mkdtemp()
 for f in fs_list:
-    eval(f).to_pickle(os.path.join(tmpdir, f + '.pkl'))
+    eval(f).to_pickle(os.path.join(tmpdir, f + '.pkl.zip'))
 
 #%%
 # Save feature set as mlflow artifacts
