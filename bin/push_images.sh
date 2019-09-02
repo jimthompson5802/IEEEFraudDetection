@@ -7,6 +7,7 @@
 images=(
     kag_python
     kag_mlbox
+    kag_mlboxgpu
     kag_h2o
     kag_tpot
     kag_tfgpu
