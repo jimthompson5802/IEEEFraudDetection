@@ -34,6 +34,22 @@ case ${container_parm} in
                 --allow-root --password='' --NotebookApp.token='' \
                  --notebook-dir=/opt/project";;
 
+    mlboxgpubash) image=kag_mlboxgpu
+            interactive='-it'
+            ports=""
+            other_run_parms='--user ec2-user:ec2-user'
+            cmd=/bin/bash;;
+
+
+    mlboxgpujpynb) image=kag_mlboxgpu
+             interactive='--detach'
+             ports='-p 8889:8889'
+             other_run_parms='--shm-size=1g --user ec2-user:ec2-user'
+             cmd="jupyter notebook --no-browser --ip 0.0.0.0  --port 8889\
+                --allow-root --password='' --NotebookApp.token='' \
+                 --notebook-dir=/opt/project";;
+
+
     h2obash) image=kag_h2o
             interactive='-it'
             ports=""

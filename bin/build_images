@@ -5,7 +5,7 @@ set -e -x
 image=${1:-all}
 
 if [[ ${image} == "all" ]]; then
-    images=(python mlbox h2o tpot tfgpu)
+    images=(python mlbox h2o tpot tfgpu mlboxgpu)
 else
     images=(${image})
 fi
