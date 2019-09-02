@@ -47,14 +47,15 @@ train_raw_df = pd.concat([train_raw[['isFraud', 'TransactionID', 'TransactionDT'
                    train_raw[num_predictors_nonskewed]
                    ], axis=1).copy()
 
-# #%%
-# test_raw_df = pd.concat([test_raw[['TransactionID', 'TransactionDT']],
-#                    test_raw[cat_predictors],
-#                    test_raw[num_predictors_skewed],
-#                    test_raw[num_predictors_nonskewed]
-#                    ], axis=1).copy()
-#
-# #%%
+print("read train")
+#%%
+test_raw_df = pd.concat([test_raw[['TransactionID', 'TransactionDT']],
+                   test_raw[cat_predictors],
+                   test_raw[num_predictors_skewed],
+                   test_raw[num_predictors_nonskewed]
+                   ], axis=1).copy()
+print("read test")
+#%%
 # # split train, valid, test data sets
 # fs_train_df, temp_train  = train_test_split(train_raw_df, train_size=0.8, random_state=13, stratify=train_raw_df['isFraud'])
 # fs_valid_df, fs_test_df = train_test_split(temp_train, train_size=0.5, random_state=29, stratify=temp_train['isFraud'])
@@ -70,7 +71,7 @@ train_raw_df = pd.concat([train_raw[['isFraud', 'TransactionID', 'TransactionDT'
 # #%%
 # # Save feature set as mlflow artifacts
 # experiment_id = mlflow.set_experiment('feature_set')
-# with mlflow.start_run(experiment_id=experiment_id, run_name='feature_set_0'):
+# with mlflow.start_run(experiment_id=experiment_id, run_name='feature_set_0_1'):
 #         mlflow.log_artifacts(tmpdir)
 #
 # #%%
