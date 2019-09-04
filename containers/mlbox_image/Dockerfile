@@ -10,7 +10,7 @@ RUN git config --global user.email "jimthompson5802@aol.com" \
 # install additional packages
 #
 RUN apt-get update && apt-get install -y build-essential && \
-    pip install mlflow mlbox
+    pip install mlflow mlbox==0.8.0
 
 # upgrade to latest pandas to match rest of environment py3.6
 RUN pip install pandas==0.24.2 scikit-learn==0.20.4
