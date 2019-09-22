@@ -1,5 +1,5 @@
 #FROM continuumio/anaconda3:2019.03
-FROM continuumio/anaconda3:5.2.0
+FROM continuumio/anaconda3:latest
 
 
 # set up git config
@@ -9,13 +9,13 @@ RUN git config --global user.email "jimthompson5802@aol.com" \
 # 
 # install additional packages
 #
-RUN apt-get update && apt-get install -y build-essential && \
-    pip install mlflow mlbox==0.8.0
+#RUN apt-get update && apt-get install -y build-essential && \
+RUN /opt/conda/bin/pip install mlflow mlbox==0.8.1
 
 # upgrade to latest pandas to match rest of environment py3.6
-RUN pip install pandas==0.24.2 scikit-learn==0.20.4
+#RUN pip install pandas==0.24.2 scikit-learn==0.20.4
 
-RUN pip install kaggle
+RUN /opt/conda/bin/pip install kaggle
 
 RUN groupadd -g 1000 ec2-user && \
     useradd -u 1000 -g 1000 ec2-user && \
@@ -31,3 +31,4 @@ USER ec2-user
 WORKDIR /opt/project
 ENV MLFLOW_TRACKING_URI /opt/project/tracking
 ENV KAGGLE_PROJECT /opt/project
+ENV PATH /opt/conda/bin:$PATH
