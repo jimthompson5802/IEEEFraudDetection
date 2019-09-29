@@ -14,7 +14,7 @@ for img in "${images[@]}"
 do
     echo ">>>> building ${img} image"
     pushd containers/${img}_image
-    docker build -t kag_${img} .
+    docker build --build-arg INSTALL_MLBOX=$(date +%s) -t kag_${img} .
     popd
 done
 

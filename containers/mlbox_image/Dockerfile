@@ -9,12 +9,6 @@ RUN git config --global user.email "jimthompson5802@aol.com" \
 # 
 # install additional packages
 #
-#RUN apt-get update && apt-get install -y build-essential && \
-RUN /opt/conda/bin/pip install mlflow mlbox==0.8.1
-
-# upgrade to latest pandas to match rest of environment py3.6
-#RUN pip install pandas==0.24.2 scikit-learn==0.20.4
-
 RUN /opt/conda/bin/pip install kaggle
 
 RUN groupadd -g 1000 ec2-user && \
@@ -25,6 +19,10 @@ RUN groupadd -g 1000 ec2-user && \
 #    mkdir -p /home/ec2-user/.config/matplotlib && \
 #    echo "backend: Agg" > /home/ec2-user/.config/matplotlib/matplotlibrc && \
 #    chown -R ec2-user:ec2-user /home/ec2-user/.config
+
+ARG UPDATE_MLBOX=default
+#mlbox==0.8.1
+RUN /opt/conda/bin/pip install mlflow  git+https://github.com/jimthompson5802/MLBox.git@integrate_mlflow
 
 USER ec2-user
 
