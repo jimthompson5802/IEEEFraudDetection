@@ -9,7 +9,8 @@ RUN git config --global user.email "jimthompson5802@aol.com" \
 # 
 # install additional packages
 #
-RUN apt-get update && apt-get install -y build-essential && \
+RUN apt-get update && apt-get install -y build-essential
+RUN pip install wrapt --upgrade --ignore-installed && \
     pip install mlflow mlbox
 
 # upgrade to latest pandas to match rest of environment py3.6
