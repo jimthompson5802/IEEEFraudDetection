@@ -7,8 +7,9 @@ RUN git config --global user.email "jimthompson5802@aol.com" \
 # 
 # install additional packages
 #
+ARG MLFLOW_VERSION
 RUN apt-get update && apt-get install -y build-essential && \
-    pip install mlflow kaggle tpot xgboost
+    pip install mlflow${MLFLOW_VERSION} kaggle tpot xgboost
 
 RUN groupadd -g 1000 ec2-user && \
     useradd -u 1000 -g 1000 ec2-user && \

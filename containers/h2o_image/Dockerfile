@@ -21,7 +21,8 @@ RUN apt-get -y update && apt-get -y install openjdk-8-jdk &&  \
 # 
 # install additional packages
 #
-RUN pip install mlflow kaggle
+ARG MLFLOW_VERSION
+RUN pip install mlflow${MLFLOW_VERSION} kaggle
 
 RUN groupadd -g 1000 ec2-user && \
     useradd -u 1000 -g 1000 ec2-user && \

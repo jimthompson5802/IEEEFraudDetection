@@ -14,7 +14,9 @@ for img in "${images[@]}"
 do
     echo ">>>> building ${img} image"
     pushd containers/${img}_image
-    docker build --build-arg INSTALL_MLBOX=$(date +%s) -t kag_${img} .
+    docker build --build-arg UPDATE_INSTALL=$(date +%s) \
+      --build-arg MLFLOW_VERSION='==1.3.0' \
+      -t kag_${img} .
     popd
 done
 

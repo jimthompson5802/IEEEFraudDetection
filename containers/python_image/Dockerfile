@@ -8,7 +8,8 @@ RUN git config --global user.email "jimthompson5802@aol.com" \
 # 
 # install additional packages
 #
-RUN pip install mlflow kaggle xgboost
+ARG MLFLOW_VERSION
+RUN pip install mlflow${MLFLOW_VERSION} kaggle xgboost
 
 RUN groupadd -g 1000 ec2-user && \
     useradd -u 1000 -g 1000 ec2-user && \

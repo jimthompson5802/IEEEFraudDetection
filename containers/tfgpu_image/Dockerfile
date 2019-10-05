@@ -5,6 +5,9 @@ RUN apt-get -y update && apt-get install -y git
 
 RUN pip install jupyter matplotlib
 
+ARG MLFLOW_VERSION
+RUN pip install mlflow${MLFLOW_VERSION}
+
 RUN groupadd -g 1000 ec2-user && \
     useradd -u 1000 -g 1000 ec2-user && \
     mkdir -p /home/ec2-user && \

@@ -20,8 +20,9 @@ RUN groupadd -g 1000 ec2-user && \
 #    echo "backend: Agg" > /home/ec2-user/.config/matplotlib/matplotlibrc && \
 #    chown -R ec2-user:ec2-user /home/ec2-user/.config
 
-ARG UPDATE_MLBOX=default
-#mlbox==0.8.1
+ARG UPDATE_INSTALL=default
+ARG MLFLOW_VERSION
+#mlbox${MLFLOW_VERSION}
 RUN /opt/conda/bin/pip install mlflow  git+https://github.com/jimthompson5802/MLBox.git@integrate_mlflow
 
 USER ec2-user
